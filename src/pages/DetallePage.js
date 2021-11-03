@@ -35,16 +35,11 @@ const DetallePage = () => {
         }
         getMascotas(URL_MASCOTAS + params.id);
 
-    }, [])
+    }, [history,params])
     return (
-        // <div className="card">
-        //     <div className="card-header">Nombre: {mascota.nombre}</div>
-        //     <div className="card-header">Nombre: {mascota.nombre}</div>
-
-        // </div>
         <div className="card-container">
             <div class="card">
-                {mascota.id == -1 ?
+                {mascota.id === -1 ?
                     <Loader /> :
                     <div class="card-content">
                         <div class="media">

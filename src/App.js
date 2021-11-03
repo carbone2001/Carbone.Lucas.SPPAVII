@@ -1,5 +1,4 @@
 import './App.css';
-import Crud from './components/Crud';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import HomePage from './pages/HomePage';
 import Error404Page from './pages/Error404Page';
