@@ -2,20 +2,24 @@ import React, { useEffect, useState } from 'react'
 import Formulario from './Formulario'
 import Tabla from './Tabla'
 import { Loader } from './Loader';
-const URL = "http://localhost:5000/movies";
+import { useHistory } from 'react-router';
+const URL = "http://localhost:5500/mascotas";
+const URL_TIPO_MASCOTAS = "http://localhost:5500/tipos";
 const Crud = () => {
-    const [movies, setMovies] = useState([])
-    const [movieEdit, setMovieEdit] = useState(null);
+    const [mascotas, setMascotas] = useState([]);
+    const [tipoMascotas, setTipoMascotas] = useState([]);
+    const [mascotaEdit, setMascotaEdit] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
+    const history = useHistory();
     useEffect(() => {
-        const getMovies = async (url) => {
+        const getMascotas = async (url) => {
             try {
                 setIsLoading(true);
                 const res = await fetch(url);
                 const data = await res.json();
-                data.forEach(peli => {
-                    setMovies((movies) => {
-                        return [...movies, peli]
+                data.forEach(mascota => {
+                    setMascotas((mascotas) => {
+                        return [...mascotas, mascota]
                     })
                 });
             } catch (error) { }
@@ -23,11 +27,29 @@ const Crud = () => {
                 setIsLoading(false);
             }
         }
-        getMovies(URL);
+
+        const getTipoMascotas = async (url) => {
+            try {
+                setIsLoading(true);
+                const res = await fetch(url);
+                const data = await res.json();
+                data.forEach(tipoMascota => {
+                    setTipoMascotas((tipoMascotas) => {
+                        return [...tipoMascotas, tipoMascota]
+                    })
+                });
+            } catch (error) { }
+            finally {
+                setIsLoading(false);
+            }
+        }
+
+        getMascotas(URL);
+        getTipoMascotas(URL_TIPO_MASCOTAS);
     }, [])
 
 
-    const createMovie = (newMovie) => {
+    const createMascota = (newMovie) => {
         setIsLoading(true);
         fetch(URL, {
             method: "POST",
@@ -37,15 +59,15 @@ const Crud = () => {
             body: JSON.stringify(newMovie)
         })
             .then((res) => res.json())
-            .then((nuevaPelicula) => {
-                setMovies((movies) => [...movies, nuevaPelicula]);
+            .then((nuevamascotacula) => {
+                setMascotas((mascotas) => [...mascotas, nuevamascotacula]);
                 alert("Alta exitosa");
             })
             .finally(()=>{
                 setIsLoading(false);
             })
     }
-    const updateMovie = (movieUpdated) => {
+    const updateMascota = (movieUpdated) => {
         setIsLoading(true);
         //path /:id
         fetch(URL + "/" + movieUpdated.id, {
@@ -57,8 +79,8 @@ const Crud = () => {
         })
             .then(res => res.json())
             .then(movieModificada => {
-                setMovies((movies) => {
-                    return movies.map((movie) => movie.id === movieModificada.id ? movieModificada : movie);
+                setMascotas((mascotas) => {
+                    return mascotas.map((movie) => movie.id === movieModificada.id ? movieModificada : movie);
                 })
                 alert("Modificacion exitosa")
             })
@@ -67,7 +89,7 @@ const Crud = () => {
             })
     }
 
-    const deleteMovie = (id) => {
+    const deleteMascota = (id) => {
         if (window.confirm("Confirma eliminacion de " + id)) {
             setIsLoading(true);
             //path /:id
@@ -76,8 +98,8 @@ const Crud = () => {
             })
             .then(res => {
                 if (res.ok) {
-                    setMovies((movies) => {
-                        return movies.filter((movie) => movie.id !== id);
+                    setMascotas((mascotas) => {
+                        return mascotas.filter((movie) => movie.id !== id);
                     })
                     alert("Borrado exitoso!!");
                 }
@@ -88,20 +110,26 @@ const Crud = () => {
         }
     }
 
+    const getMascotaDetalles = (id) => {
+        history.push("/detalles/"+id);
+    }
+
     return (
         <section>
             <Formulario
-                updateMovie={updateMovie}
-                createMovie={createMovie}
-                movieEdit={movieEdit}
-                setMovieEdit={setMovieEdit}
+                updateMascota={updateMascota}
+                createMascota={createMascota}
+                mascotaEdit={mascotaEdit}
+                setMascotaEdit={setMascotaEdit}
+                tipoMascotas={tipoMascotas}
             />
             {isLoading ?
                 <Loader /> :
                 <Tabla
-                    data={movies}
-                    setMovieEdit={setMovieEdit}
-                    deleteMovie={deleteMovie}
+                    data={mascotas}
+                    setMascotaEdit={setMascotaEdit}
+                    deleteMascota={deleteMascota}
+                    getMascotaDetalles={getMascotaDetalles}
                 />}
         </section>
     )

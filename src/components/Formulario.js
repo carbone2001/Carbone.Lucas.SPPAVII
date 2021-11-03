@@ -1,62 +1,83 @@
 import React, { useEffect, useState } from 'react'
+import SelectTipoMascota from './SelectTipoMascota';
 const initialForm = {
     id: null,
-    titulo: "",
-    genero: ""
+    nombre: "",
+    edad: "",
+    tipo:"",
+    vacunado: "",
+    observaciones:""
 }
-const Formulario = ({setMovieEdit, createMovie, updateMovie, movieEdit }) => {
+const Formulario = ({setMascotaEdit, createMascota, updateMascota, mascotaEdit, tipoMascotas }) => {
     const [form, setForm] = useState(initialForm);
-    const { id, titulo, genero } = form;
+    const { id, nombre, edad, tipo, vacunado, observaciones } = form;
     useEffect(() => {
-        if(movieEdit){
-            setForm(movieEdit);
+        if(mascotaEdit){
+            setForm(mascotaEdit);
         }
-    }, [movieEdit])
+    }, [mascotaEdit])
 
-    const handleChange = (e) => {
+    const handlerChange = ({target}) => {
+        let {name,value,checked} = target;
+        value = (name === "vacunado") ? checked : value;
         setForm((form) => {
-            return { ...form, [e.target.name]: e.target.value };
+            return { ...form, [name]: value };
         })
     }
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("Enviando");
-        if (!titulo || !genero) {
+        
+        if (!nombre || !tipo) {
             alert("Faltan datos");
             return;
         }
         if (id) {
-            updateMovie(form);
+            updateMascota(form);
             
         }else{
-            createMovie(form);
+            createMascota(form);
         }
         setForm(initialForm);
     }
-    const handleReset = () => {
+    const handlerReset = () => {
         setForm(initialForm);
-        setMovieEdit(null);
+        setMascotaEdit(null);
     }
     return (
         <>
-            <h2>{id?"Update Movie":"Create Movie"}</h2>
+            <h2 className="title is-4">{id?"Update Mascota":"Create Mascota"}</h2>
             <form onSubmit={handleSubmit}>
                 <input
+                    className="input"
                     type="text"
-                    name="titulo"
-                    placeholder="Titulo"
+                    name="nombre"
+                    placeholder="Nombre"
                     autoComplete="off"
-                    onChange={handleChange}
-                    value={titulo} />
+                    onChange={handlerChange}
+                    value={nombre} />
+                <br/>
+                <br/>
                 <input
-                    type="text"
-                    name="genero"
-                    placeholder="Genero"
+                    className="input"
+                    type="number"
+                    name="edad"
+                    placeholder="Edad"
                     autoComplete="off"
-                    value={genero}
-                    onChange={handleChange} />
-                <input type="submit" value="Enviar" />
-                <input type="reset" onClick={handleReset} value="Limpiar" />
+                    value={edad}
+                    onChange={handlerChange} />
+                <br/>
+                <br/>
+                <SelectTipoMascota onChange={handlerChange} value={tipo} tipoMascotas={tipoMascotas} />
+                <br/>
+                <br/>
+                <label  className="checkbox"><input checked={vacunado} type="checkbox" name="vacunado" onChange={handlerChange} /> Vacunado</label> 
+                <br/>
+                <br/>
+
+                <textarea className="textarea" value={observaciones}  name="observaciones" onChange={handlerChange}/>
+                <br/>
+                <input type="submit" className="button is-primary" value="Enviar" />
+                <input type="reset" className="button is-warning" onClick={handlerReset} value="Limpiar" />
             </form>
         </>
     )

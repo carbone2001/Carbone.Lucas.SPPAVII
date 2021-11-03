@@ -1,14 +1,19 @@
 import React from 'react'
 
-const Row = ({movie,setMovieEdit,deleteMovie}) => {
-    const {id,titulo,genero} = movie;
+const Row = ({mascota,setMascotaEdit,deleteMascota,getMascotaDetalles}) => {
+    const {id,nombre,tipo} = mascota;
     return (
         <tr>
-            <td>{titulo}</td>
-            <td>{genero}</td>
+            <td>{nombre}</td>
+            <td>{tipo}</td>
             <td>
-                <button onClick={()=>{setMovieEdit(movie)}}>Update</button>
-                <button onClick={()=>{deleteMovie(id)}}>Delete</button>
+                <button className="button is-info" onClick={()=>{getMascotaDetalles(id)}}>Ver Detalles</button>
+            </td>
+            <td>
+                <button className="button is-primary" onClick={()=>{setMascotaEdit(mascota)}}>Modificar</button>
+            </td>
+            <td>
+            <button className="button is-danger" onClick={()=>{deleteMascota(id)}}>Eliminar</button>
             </td>
         </tr>
     )
