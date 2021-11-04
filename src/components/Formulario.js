@@ -20,6 +20,7 @@ const Formulario = ({setMascotaEdit, createMascota, updateMascota, mascotaEdit, 
     const handlerChange = ({target}) => {
         let {name,value,checked} = target;
         value = (name === "vacunado") ? checked : value;
+        
         setForm((form) => {
             return { ...form, [name]: value };
         })
@@ -27,7 +28,7 @@ const Formulario = ({setMascotaEdit, createMascota, updateMascota, mascotaEdit, 
     const handleSubmit = (e) => {
         e.preventDefault();
         
-        if (!nombre || !tipo) {
+        if (!nombre || !tipo || !vacunado || !observaciones || !edad) {
             alert("Faltan datos");
             return;
         }

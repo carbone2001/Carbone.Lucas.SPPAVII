@@ -7,7 +7,8 @@ const SelectTipoMascota = ({ tipoMascotas, onChange, value }) => {
     }
 
     return (
-        <select className="select" name="tipo" value={value} onChange={handlerChange}>
+        <select className="select" name="tipo" value={value} onChange={handlerChange}> 
+        <option value="" key={"sin-opt"}>Seleccione un Tipo</option>
             {tipoMascotas.map((tipoMascota) => <option key={tipoMascota.id}>{tipoMascota.descripcion}</option>)}
         </select>
     )
